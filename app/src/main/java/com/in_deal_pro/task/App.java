@@ -1,7 +1,13 @@
 package com.in_deal_pro.task;
 
+import com.in_deal_pro.task.input.FileInput;
+import com.in_deal_pro.task.input.Input;
+
 public class App {
     public static void main( String[] args ) {
-        System.out.println( "Hello World!" );
+
+//        Input input = new FileInput("input.txt");
+//        input.getAllBricks();
+
     }
 }
