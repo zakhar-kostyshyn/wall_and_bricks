@@ -49,19 +49,19 @@ class ValidatorTest {
 
     @Test
     void isEnoughBlocks() {
-        assertTrue(validator.isEnoughBlocks(0));
-        assertFalse(validator.isEnoughBlocks(1));
-        assertFalse(validator.isEnoughBlocks(2));
-
-        Set<Brick> bricks = Set.of(
-                new Brick(1, 1, 5),
-                new Brick(6, 5, 1)
-        );
-        Validator test = new Validator(bricks, new Wall(matrix, 16));
-
-        assertTrue(test.isEnoughBlocks(0));
-        assertTrue(test.isEnoughBlocks(1));
-        assertFalse(test.isEnoughBlocks(2));
+//        assertTrue(validator.isEnoughBlocks(0));
+//        assertFalse(validator.isEnoughBlocks(1));
+//        assertFalse(validator.isEnoughBlocks(2));
+//
+//        Set<Brick> bricks = Set.of(
+//                new Brick(1, 1, 5),
+//                new Brick(6, 5, 1)
+//        );
+//        Validator test = new Validator(bricks, new Wall(matrix, 16));
+//
+//        assertTrue(test.isEnoughBlocks(0));
+//        assertTrue(test.isEnoughBlocks(1));
+//        assertFalse(test.isEnoughBlocks(2));
 
     }
 
@@ -134,6 +134,39 @@ class ValidatorTest {
     }
 
     @Test
+    void findPlaceForSwapBrickTest() {
+
+/*
+        {1, 0, 1, 1, 0, 1},
+        {1, 1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1, 1}
+*/
+
+        Brick brick = new Brick(2, 3, 4);
+
+        int[] expected = {1, 0};
+        int[] actual = validator.findPlaceForSwapBrick(brick);
+        assertArrayEquals(expected, actual);
+
+        brick.setSwapX(1);
+        brick.setSwapY(0);
+        expected = new int[] {1, 1};
+        actual = validator.findPlaceForSwapBrick(brick);
+        assertArrayEquals(expected, actual);
+
+        brick.setSwapX(1);
+        brick.setSwapY(2);
+        expected = new int[] {1, 3};
+        actual = validator.findPlaceForSwapBrick(brick);
+        assertArrayEquals(expected, actual);
+
+        brick.setSwapX(1);
+        brick.setSwapY(3);
+        actual = validator.findPlaceForSwapBrick(brick);
+        assertNull(actual);
+    }
+
+    @Test
     void findPlaceForBrickTest() {
 
 /*
@@ -158,6 +191,36 @@ class ValidatorTest {
         actual = validator.findPlaceForBrick(brick3);
         assertArrayEquals(expected, actual);
 
+        // test get next place if x and y not standart
+        brick1.setX(2);
+        brick1.setY(4);
+        expected = new int[] {2, 5};
+        actual = validator.findPlaceForBrick(brick1);
+        assertArrayEquals(expected, actual);
+
+        brick1.setX(1);
+        brick1.setY(5);
+        expected = new int[] {2, 0};
+        actual = validator.findPlaceForBrick(brick1);
+        assertArrayEquals(expected, actual);
+
+        brick3.setX(1);
+        brick3.setY(0);
+        expected = new int[] {2, 0};
+        actual = validator.findPlaceForBrick(brick3);
+        assertArrayEquals(expected, actual);
+
+        brick2.setX(0);
+        brick2.setY(2);
+        actual = validator.findPlaceForBrick(brick2);
+        assertNull(actual);
+
+/*
+        {1, 0, 1, 1, 0, 1},
+        {1, 1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1, 1}
+*/
+
     }
 
     @Test
@@ -170,11 +233,13 @@ class ValidatorTest {
 */
         int x = 0;
         int y = 2;
+        int swapX = 0;
+        int swapY = 0;
         int height = 3;
         int width = 1;
         int brickIndex = 1;
         int countOfSimilarBricks = validator.bricks.get(brickIndex).getCountOfSimilarBricks();
-        validator.makeStep(x, y, height, width, brickIndex);
+        validator.makeStep(x, y, swapX, swapY, height, width, brickIndex, true);
         Validator.Memento memento = validator.queue.peek();
         assertEquals(x, memento.x);
         assertEquals(y, memento.y);

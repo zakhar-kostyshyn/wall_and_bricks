@@ -8,8 +8,13 @@ public class Brick implements Comparable<Brick> {
     private int height;
     private int countOfSimilarBricks;
     private final int countOfBlocks;
-    private int x = -1;
-    private int y = -1;
+    private int x = 0;
+    private int y = -1;     //  for add possibility in findPlaceForBrick()
+    private int swapX = 0;
+    private int swapY = -1;
+
+    private Point lastIndex = new Point(0, -1);
+    private Point lastSwapIndex = new Point(0, -1);
 
     public Brick(int width, int height, int countOfSimilarBricks) {
         this.width = width;
@@ -84,5 +89,21 @@ public class Brick implements Comparable<Brick> {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getSwapX() {
+        return swapX;
+    }
+
+    public int getSwapY() {
+        return swapY;
+    }
+
+    public void setSwapX(int swapX) {
+        this.swapX = swapX;
+    }
+
+    public void setSwapY(int swapY) {
+        this.swapY = swapY;
     }
 }
