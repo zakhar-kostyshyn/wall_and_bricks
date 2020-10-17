@@ -1,7 +1,7 @@
 package com.in_deal_pro.task.input;
 
-import com.in_deal_pro.task.Brick;
-import com.in_deal_pro.task.Wall;
+import com.in_deal_pro.task.model.Brick;
+import com.in_deal_pro.task.model.Wall;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -9,11 +9,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import static java.lang.Integer.parseInt;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 public class FileInput implements Input {
 
@@ -85,15 +86,16 @@ public class FileInput implements Input {
         return allLines.stream().skip(1).limit(getShapeHeight());
     }
 
+    //  TODO enter similar lines
     @Override
-    public List<Brick> getAllBricks() {
+    public Set<Brick> getAllBricks() {
         return streamOfBricksLines()
                 .map(line -> line.replaceAll("\\s", ""))
                 .map(line -> new Brick(
                         parseInt(line.substring(0, 1)),
                         parseInt(line.substring(1, 2)),
                         parseInt(line.substring(2)))
-                ).collect(toList());
+                ).collect(toCollection(TreeSet::new));
     }
 
     private Stream<String> streamOfBricksLines() {

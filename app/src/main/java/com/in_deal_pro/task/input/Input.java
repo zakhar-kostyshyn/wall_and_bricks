@@ -1,14 +1,14 @@
 package com.in_deal_pro.task.input;
 
-import com.in_deal_pro.task.Brick;
-import com.in_deal_pro.task.Wall;
+import com.in_deal_pro.task.model.Brick;
+import com.in_deal_pro.task.model.Wall;
 
-import java.util.List;
+import java.util.Set;
 
 public interface Input {
     int getShapeWidth();
     int getShapeHeight();
     Wall getWall();
     int getBricksCount();
-    List<Brick> getAllBricks();
+    Set<Brick> getAllBricks();
 }

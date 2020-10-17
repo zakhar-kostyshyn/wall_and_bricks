@@ -1,4 +1,4 @@
-package com.in_deal_pro.task;
+package com.in_deal_pro.task.model;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -6,7 +6,6 @@ import java.util.Objects;
 public class Wall {
 
     private int [][] currentMatrix;
-    private int [][] previousMatrix;
     private int countOfBlocks;
 
     public Wall(int[][] currentMatrix, int countOfBlocks) {
@@ -14,22 +13,19 @@ public class Wall {
         this.countOfBlocks = countOfBlocks;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Wall wall = (Wall) o;
         return countOfBlocks == wall.countOfBlocks &&
-                Arrays.deepEquals(currentMatrix, wall.currentMatrix) &&
-                Arrays.deepEquals(previousMatrix, wall.previousMatrix);
+                Arrays.deepEquals(currentMatrix, wall.currentMatrix);
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hash(countOfBlocks);
-        result = 31 * result + Arrays.hashCode(currentMatrix);
-        result = 31 * result + Arrays.hashCode(previousMatrix);
+        result = 31 * result + Arrays.deepHashCode(currentMatrix);
         return result;
     }
 
@@ -38,7 +34,22 @@ public class Wall {
         return "Wall{" +
                 "countOfBlocks=" + countOfBlocks +
                 ", currentMatrix=" + Arrays.deepToString(currentMatrix) +
-                ", previousMatrix=" + Arrays.deepToString(previousMatrix) +
                 '}';
+    }
+
+    public int[][] getCurrentMatrix() {
+        return currentMatrix;
+    }
+
+    public void setCurrentMatrix(int[][] currentMatrix) {
+        this.currentMatrix = currentMatrix;
+    }
+
+    public int getCountOfBlocks() {
+        return countOfBlocks;
+    }
+
+    public void setCountOfBlocks(int countOfBlocks) {
+        this.countOfBlocks = countOfBlocks;
     }
 }

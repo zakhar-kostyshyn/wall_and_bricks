@@ -1,10 +1,13 @@
-package com.in_deal_pro.task.input;
+package com.in_deal_pro.task;
 
-import com.in_deal_pro.task.Brick;
-import com.in_deal_pro.task.Wall;
+import com.in_deal_pro.task.input.FileInput;
+import com.in_deal_pro.task.input.Input;
+import com.in_deal_pro.task.model.Brick;
+import com.in_deal_pro.task.model.Wall;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,7 +59,7 @@ class FileInputTest {
 
     @Test
     void testGetAllBricks() {
-        var expected = List.of(
+        var expected = Set.of(
                 new Brick(1, 1, 4),
                 new Brick(2, 1, 6),
                 new Brick(1, 3, 1),

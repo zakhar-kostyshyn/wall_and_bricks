@@ -6,8 +6,8 @@ import com.in_deal_pro.task.input.Input;
 public class App {
     public static void main( String[] args ) {
 
-//        Input input = new FileInput("input.txt");
-//        input.getAllBricks();
+        Input input = new FileInput("input.txt");
+
 
     }
 }
