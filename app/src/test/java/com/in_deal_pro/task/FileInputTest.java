@@ -2,7 +2,8 @@ package com.in_deal_pro.task;
 
 import com.in_deal_pro.task.input.FileInput;
 import com.in_deal_pro.task.input.Input;
-import com.in_deal_pro.task.model.Brick;
+import com.in_deal_pro.task.model.NormalBrick;
+import com.in_deal_pro.task.model.SimilarBlocks;
 import com.in_deal_pro.task.model.Wall;
 import org.junit.jupiter.api.Test;
 
@@ -60,10 +61,10 @@ class FileInputTest {
     @Test
     void testGetAllBricks() {
         var expected = Set.of(
-                new Brick(1, 1, 4),
-                new Brick(2, 1, 6),
-                new Brick(1, 3, 1),
-                new Brick(3, 4, 5)
+                new NormalBrick(1, 1, new SimilarBlocks(4)),
+                new NormalBrick(2, 1, new SimilarBlocks(6)),
+                new NormalBrick(1, 3, new SimilarBlocks(1)),
+                new NormalBrick(3, 4, new SimilarBlocks(5))
         );
         var actual = input.getAllBricks();
         assertEquals(expected, actual);

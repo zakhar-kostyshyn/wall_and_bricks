@@ -1,7 +1,7 @@
 package com.in_deal_pro.task;
 
-import com.in_deal_pro.task.model.Brick;
-import com.in_deal_pro.task.model.Wall;
+import com.in_deal_pro.task.model.*;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -20,30 +20,21 @@ public class TestCheck {
                         {1, 1, 1, 1, 1, 1},
                         {1, 1, 1, 1, 1, 1}
                 };
+
         Set<Brick> bricks = new TreeSet<>();
-        bricks.add(new Brick(1, 1, 4));
-        bricks.add(new Brick(2, 1, 6));
-        bricks.add(new Brick(3, 1, 1));
+        var brick3 = new NormalBrick(3, 1, new SimilarBlocks(1));
+        var brick1 = new NormalBrick(1, 1, new SimilarBlocks(4));
+        var brick2 = new NormalBrick(2, 1, new SimilarBlocks(6));
+
+        bricks.add(brick1);
+        bricks.add(brick2);
+        bricks.add(brick3);
+        bricks.add(new SwappedBrick(brick1));
+        bricks.add(new SwappedBrick(brick2));
+        bricks.add(new SwappedBrick(brick3));
 
         Validator validator = new Validator(bricks, new Wall(matrix, 16));
         assertTrue(validator.check());
-    }
-
-    @Test
-    void earlyAndSimpleCheckTest2() {
-        int [][] matrix =
-                {
-                        {0, 0, 1, 1, 0, 0},
-                        {1, 1, 0, 0, 1, 1},
-                        {1, 1, 1, 1, 1, 1}
-                };
-        Set<Brick> bricks = new TreeSet<>();
-        bricks.add(new Brick(2, 2, 1));
-        bricks.add(new Brick(3, 1, 1));
-        bricks.add(new Brick(4, 1, 1));
-
-        Validator validator = new Validator(bricks, new Wall(matrix, 12));
-        assertFalse(validator.check());
     }
 
     @Test
@@ -55,7 +46,8 @@ public class TestCheck {
                         {1, 1, 1, 1, 1, 1}
                 };
         Set<Brick> bricks = new TreeSet<>();
-        bricks.add(new Brick(3, 3, 2));
+        bricks.add(new NormalBrick(3, 3, new SimilarBlocks(2)));
+        bricks.add(new NormalBrick(3, 3, new SimilarBlocks(2)));
         Validator validator = new Validator(bricks, new Wall(matrix, 18));
         assertTrue(validator.check());
     }
@@ -70,13 +62,14 @@ public class TestCheck {
                 };
 
         Set<Brick> bricks = new TreeSet<>();
-        bricks.add(new Brick(6, 3, 1));
+        bricks.add(new NormalBrick(6, 3, new SimilarBlocks(1)));
+        bricks.add(new NormalBrick(3, 6, new SimilarBlocks(1)));
         Validator validator = new Validator(bricks, new Wall(matrix, 18));
         assertTrue(validator.check());
     }
 
     @Test
-    void earlyAndSimpleCheckTest5() {
+    void earlyAndSimpleCheckTest2() {
         int [][] matrix =
                 {
                         {1, 1, 1, 1, 1, 1},
@@ -85,35 +78,113 @@ public class TestCheck {
                 };
 
         Set<Brick> bricks = new TreeSet<>();
-        bricks.add(new Brick(3, 6, 1));
+        bricks.add(new NormalBrick(3, 6, new SimilarBlocks(1)));
+        bricks.add(new NormalBrick(6, 3, new SimilarBlocks(1)));
         Validator validator = new Validator(bricks, new Wall(matrix, 18));
         assertTrue(validator.check());
     }
 
+    @Test
+    void earlyAndSimpleCheckTest5() {
+        int [][] matrix =
+                {
+                        {0, 0, 1, 1, 0, 0},
+                        {1, 1, 0, 0, 1, 1},
+                        {1, 1, 1, 1, 1, 1}
+                };
+        Set<Brick> bricks = new TreeSet<>();
 
-//    @Test
-//    void earlyAndSimpleCheckTest6() {
-//        int [][] matrix =
-//                {
-//                        {0, 0, 0, 0, 0, 0, 1},
-//                        {0, 0, 0, 0, 0, 0, 1},
-//                        {0, 0, 0, 0, 0, 0, 1},
-//                        {1, 1, 1, 1, 1, 0, 1},
-//                        {1, 1, 0, 1, 1, 0, 1},
-//                        {1, 1, 0, 0, 0, 0, 1},
-//                        {1, 1, 0, 1, 1, 1, 1}
-//                };
-//
-//        Set<Brick> bricks = new TreeSet<>();
-//        bricks.add(new Brick(6, 3, 2));
-//        bricks.add(new Brick(7, 1, 2));
-//        bricks.add(new Brick(3, 2, 2));
-//        bricks.add(new Brick(2, 2, 3));
-//        bricks.add(new Brick(2, 1, 3));
-//
-//        Validator validator = new Validator(bricks, new Wall(matrix, 18));
-//        assertFalse(validator.check());
-//    }
+        var brick3 = new NormalBrick(2, 2, new SimilarBlocks(1));
+        var brick1 = new NormalBrick(3, 1, new SimilarBlocks(1));
+        var brick2 = new NormalBrick(4, 1, new SimilarBlocks(1));
+
+        bricks.add(brick1);
+        bricks.add(brick2);
+        bricks.add(brick3);
+        bricks.add(new SwappedBrick(brick1));
+        bricks.add(new SwappedBrick(brick2));
+        bricks.add(new SwappedBrick(brick3));
+
+
+        Validator validator = new Validator(bricks, new Wall(matrix, 12));
+        assertFalse(validator.check());
+    }
+
+    @Test
+    void earlyAndSimpleCheckTest6() {
+        int [][] matrix =
+                {
+                        {0, 0, 0, 0, 0, 0, 1},
+                        {0, 0, 0, 0, 0, 0, 1},
+                        {0, 0, 0, 0, 0, 0, 1},
+                        {1, 1, 1, 1, 1, 0, 1},
+                        {1, 1, 0, 1, 1, 0, 1},
+                        {1, 1, 0, 0, 0, 0, 1},
+                        {1, 1, 0, 1, 1, 1, 1}
+                };
+
+        Set<Brick> bricks = new TreeSet<>();
+
+        var brick1 = new NormalBrick(6, 3, new SimilarBlocks(2));
+        var brick2 = new NormalBrick(7, 1, new SimilarBlocks(2));
+        var brick3 = new NormalBrick(3, 2, new SimilarBlocks(2));
+        var brick4 = new NormalBrick(2, 2, new SimilarBlocks(3));
+        var brick5 = new NormalBrick(2, 1, new SimilarBlocks(3));
+
+        bricks.add(brick1);
+        bricks.add(brick2);
+        bricks.add(brick3);
+        bricks.add(brick4);
+        bricks.add(brick5);
+        bricks.add(new SwappedBrick(brick1));
+        bricks.add(new SwappedBrick(brick2));
+        bricks.add(new SwappedBrick(brick3));
+        bricks.add(new SwappedBrick(brick4));
+        bricks.add(new SwappedBrick(brick5));
+
+        Validator validator = new Validator(bricks, new Wall(matrix, 18));
+        assertFalse(validator.check());
+    }
+
+    @Test
+    void earlyAndSimpleCheckTest7() {
+        int [][] matrix =
+                {
+                        {0, 0, 0, 0, 0, 0, 1},
+                        {0, 0, 0, 0, 0, 0, 1},
+                        {0, 0, 0, 0, 0, 0, 1},
+                        {1, 1, 1, 1, 1, 0, 1},
+                        {1, 1, 0, 1, 1, 0, 1},
+                        {1, 1, 0, 0, 0, 0, 1},
+                        {1, 1, 0, 1, 1, 1, 1}
+                };
+
+        Set<Brick> bricks = new TreeSet<>();
+
+        var brick1 = new NormalBrick(6, 3, new SimilarBlocks(2));
+        var brick2 = new NormalBrick(7, 1, new SimilarBlocks(2));
+        var brick3 = new NormalBrick(3, 2, new SimilarBlocks(2));
+        var brick4 = new NormalBrick(2, 2, new SimilarBlocks(3));
+        var brick5 = new NormalBrick(2, 1, new SimilarBlocks(3));
+        var brick6 = new NormalBrick(1, 1, new SimilarBlocks(2));
+
+        bricks.add(brick1);
+        bricks.add(brick2);
+        bricks.add(brick3);
+        bricks.add(brick4);
+        bricks.add(brick5);
+        bricks.add(brick6);
+        bricks.add(new SwappedBrick(brick1));
+        bricks.add(new SwappedBrick(brick2));
+        bricks.add(new SwappedBrick(brick3));
+        bricks.add(new SwappedBrick(brick4));
+        bricks.add(new SwappedBrick(brick5));
+        bricks.add(new SwappedBrick(brick6));
+
+        Validator validator = new Validator(bricks, new Wall(matrix, 18));
+        assertTrue(validator.check());
+    }
+
 
 
 }

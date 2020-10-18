@@ -1,7 +1,6 @@
 package com.in_deal_pro.task.input;
 
-import com.in_deal_pro.task.model.Brick;
-import com.in_deal_pro.task.model.Wall;
+import com.in_deal_pro.task.model.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -89,13 +88,25 @@ public class FileInput implements Input {
     //  TODO enter similar lines
     @Override
     public Set<Brick> getAllBricks() {
+        var A = getAllGivenBricks();
+        A.addAll(swapAllGivenBricks(A));
+        return A;
+    }
+
+    private Set<Brick> getAllGivenBricks() {
         return streamOfBricksLines()
                 .map(line -> line.replaceAll("\\s", ""))
-                .map(line -> new Brick(
+                .map(line -> new NormalBrick(
                         parseInt(line.substring(0, 1)),
                         parseInt(line.substring(1, 2)),
-                        parseInt(line.substring(2)))
+                        new SimilarBlocks(parseInt(line.substring(2))))
                 ).collect(toCollection(TreeSet::new));
+    }
+
+    private Set<Brick> swapAllGivenBricks(Set<Brick> bricks) {
+        return bricks.stream()
+                .map(SwappedBrick::new)
+                .collect(toSet());
     }
 
     private Stream<String> streamOfBricksLines() {

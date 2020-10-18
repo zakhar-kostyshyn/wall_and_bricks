@@ -13,6 +13,11 @@ public class Wall {
         this.countOfBlocks = countOfBlocks;
     }
 
+
+    public void decreaseCountOfBlocksByBrickSize(int countToDecrease) {
+        countOfBlocks -= countToDecrease;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
