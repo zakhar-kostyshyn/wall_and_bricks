@@ -2,6 +2,7 @@ package com.in_deal_pro.task;
 
 import com.in_deal_pro.task.input.FileInput;
 import com.in_deal_pro.task.input.Input;
+import com.in_deal_pro.task.model.Brick;
 import com.in_deal_pro.task.model.NormalBrick;
 import com.in_deal_pro.task.model.SimilarBlocks;
 import com.in_deal_pro.task.model.Wall;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,12 +62,15 @@ class FileInputTest {
 
     @Test
     void testGetAllBricks() {
-        var expected = Set.of(
-                new NormalBrick(1, 1, new SimilarBlocks(4)),
-                new NormalBrick(2, 1, new SimilarBlocks(6)),
-                new NormalBrick(1, 3, new SimilarBlocks(1)),
-                new NormalBrick(3, 4, new SimilarBlocks(5))
-        );
+        Set<Brick> expected = new TreeSet<>();
+        expected.add(new NormalBrick(4, 3, new SimilarBlocks(5)));
+        expected.add(new NormalBrick(1, 1, new SimilarBlocks(4)));
+        expected.add(new NormalBrick(2, 1, new SimilarBlocks(6)));
+        expected.add(new NormalBrick(1, 3, new SimilarBlocks(1)));
+        expected.add(new NormalBrick(3, 4, new SimilarBlocks(5)));
+        expected.add(new NormalBrick(1, 1, new SimilarBlocks(4)));
+        expected.add(new NormalBrick(1, 2, new SimilarBlocks(6)));
+        expected.add(new NormalBrick(3, 1, new SimilarBlocks(1)));
         var actual = input.getAllBricks();
         assertEquals(expected, actual);
     }

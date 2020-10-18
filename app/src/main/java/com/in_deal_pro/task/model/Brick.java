@@ -5,8 +5,6 @@ public interface Brick extends Comparable<Brick> {
     int getCountOfBlocks();
     int getWidth();
     int getHeight();
-    Point getLastIndex();
-    void setLastIndex(Point point);
     String toString();
     void decreaseCountOfBricksByOne();
     void increaseCountOfBricksByOne();

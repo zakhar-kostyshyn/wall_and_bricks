@@ -21,7 +21,7 @@ public class Validator {
     int[][] matrix;
     int countOfBlocks;
 
-    Point lastIndex;
+    Point currentPoint = new Point();
 
     public Validator(Set<Brick> bricks, Wall wall) {
         this.bricks = new ArrayList<>(bricks);
@@ -48,7 +48,6 @@ public class Validator {
             height = currentBrick.getHeight();
             matrix = wall.getCurrentMatrix();
             countOfBlocks = wall.getCountOfBlocks();
-            lastIndex = currentBrick.getLastIndex();
 
             if (!isEnoughBlocks(brickIndex)) {
                 if (queue.isEmpty())
@@ -87,32 +86,25 @@ public class Validator {
     }
 
     boolean findPlace() {
-        int x = lastIndex.getX();
-        int y = lastIndex.getY();
-        if (y + 1 >= matrix[x].length) {
-            x++;
-            y = 0;
-        }
-        for (int i = x; i < matrix.length; i++) {
-            for (int j = y; j < matrix[i].length; j++) {
-                if (isBlock(i, j)) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (isEqualsOne(i, j)) {
                     if (isEnoughAreaForBrick(i, j)) {
                         int[][] subMatrix = createSubMatrix(i, j);
                         boolean isAllOne = checkIfEveryBlockIsOne(subMatrix);
                         if (isAllOne) {
-                            lastIndex.setX(i);
-                            lastIndex.setY(j);
+                            currentPoint.setX(i);
+                            currentPoint.setY(j);
                             return true;
                         }
                     }
                 }
             }
-            y = 0;
         }
         return false;
     }
 
-    boolean isBlock(int i, int j) {
+    boolean isEqualsOne(int i, int j) {
         return matrix[i][j] == 1;
     }
 
@@ -145,18 +137,17 @@ public class Validator {
 
     public void createSnapshot() {
         int [][] copyMatrix = Arrays.stream(matrix).map(int[]::clone).toArray(int[][]::new);
-        Memento memento = new Memento(lastIndex, brickIndex, copyMatrix, countOfBlocks);
+        Memento memento = new Memento(brickIndex, copyMatrix, countOfBlocks);
         queue.push(memento);
     }
 
     void changeCurrentBrickCoordinatesAndDecreaseItCount() {
         currentBrick.decreaseCountOfBricksByOne();
-        currentBrick.setLastIndex(lastIndex);
     }
 
     void fillMatrixWithCurrentBrick() {
-        int x = lastIndex.getX();
-        int y = lastIndex.getY();
+        int x = currentPoint.getX();
+        int y = currentPoint.getY();
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)
                 matrix[x + i][y + j] = 0;
@@ -173,8 +164,6 @@ public class Validator {
                 .sum();
     }
 
-
-
     public boolean isWallFilled() {
         return Arrays.stream(wall.getCurrentMatrix()).flatMapToInt(Arrays::stream).allMatch(i -> i == 0);
     }
@@ -186,16 +175,14 @@ public class Validator {
 
     static class Memento {
 
-        public Point lastIndex;
         public int brickIndex;
         public int [][] currentMatrix;
         public int countOfBlocks;
 
-        public Memento(Point lastIndex, int brickIndex, int[][] currentMatrix, int countOfBlocks) {
+        public Memento(int brickIndex, int[][] currentMatrix, int countOfBlocks) {
             this.brickIndex = brickIndex;
             this.currentMatrix = currentMatrix;
             this.countOfBlocks = countOfBlocks;
-            this.lastIndex = lastIndex;
         }
     }
 

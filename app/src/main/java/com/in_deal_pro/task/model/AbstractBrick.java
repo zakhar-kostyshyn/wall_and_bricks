@@ -9,14 +9,12 @@ public abstract class AbstractBrick implements Brick {
     protected final int countOfBlocks;
 
     protected SimilarBlocks similarBlocks;
-    protected Point lastIndex;
 
     public AbstractBrick(int width, int height, SimilarBlocks similarBlocks) {
         this.width = width;
         this.height = height;
         this.similarBlocks = similarBlocks;
         this.countOfBlocks = width * height;
-        this.lastIndex = new Point();
     }
 
     @Override
@@ -35,13 +33,12 @@ public abstract class AbstractBrick implements Brick {
         return  width == brick.width &&
                 height == brick.height &&
                 similarBlocks == brick.similarBlocks &&
-                countOfBlocks == brick.countOfBlocks &&
-                lastIndex.equals(brick.lastIndex);
+                countOfBlocks == brick.countOfBlocks;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(width, height, similarBlocks, countOfBlocks, lastIndex);
+        return Objects.hash(width, height, similarBlocks, countOfBlocks);
     }
 
     @Override
@@ -63,14 +60,6 @@ public abstract class AbstractBrick implements Brick {
 
     public int getHeight() {
         return height;
-    }
-
-    public Point getLastIndex() {
-        return lastIndex;
-    }
-
-    public void setLastIndex(Point lastIndex) {
-        this.lastIndex = lastIndex;
     }
 
     public int getCountOfSimilarBricks() {
