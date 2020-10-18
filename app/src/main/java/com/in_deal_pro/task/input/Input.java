@@ -8,7 +8,7 @@ import java.util.Set;
 public interface Input {
     int getShapeWidth();
     int getShapeHeight();
-    Wall getWall();
     int getBricksCount();
+    Wall getWall();
     Set<Brick> getAllBricks();
 }
