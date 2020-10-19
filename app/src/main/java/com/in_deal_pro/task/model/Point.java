@@ -8,7 +8,7 @@ public class Point {
     int y;
 
     public Point() {
-        this(0, 0);
+        this(0, -1);
     }
 
     public Point(int x, int y) {

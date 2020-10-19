@@ -8,9 +8,9 @@ import java.util.*;
 
 public class Validator {
 
-    private List<Brick> bricks;
-    private Wall wall;
-    private Deque<Memento> queue = new ArrayDeque<>();
+    public List<Brick> bricks;
+    public Wall wall;
+    public Deque<Memento> queue = new ArrayDeque<>();
 
     int brickIndex = 0;
 
@@ -21,7 +21,7 @@ public class Validator {
     int[][] matrix;
     int countOfBlocks;
 
-    Point currentPoint = new Point();
+    Point lastIndex;
 
     public Validator(Set<Brick> bricks, Wall wall) {
         this.bricks = new ArrayList<>(bricks);
@@ -33,7 +33,7 @@ public class Validator {
 
             currentBrick = bricks.get(brickIndex);
 
-            if (currentBrick.getCountOfSimilarBricks() == 0) {
+            if (currentBrick.isThereBricks()) {
                 if (brickIndex + 1 != bricks.size()) {
                     brickIndex = brickIndex + 1;
                     currentBrick = bricks.get(brickIndex);
@@ -48,6 +48,7 @@ public class Validator {
             height = currentBrick.getHeight();
             matrix = wall.getCurrentMatrix();
             countOfBlocks = wall.getCountOfBlocks();
+            lastIndex = currentBrick.getLastPoint();
 
             if (!isEnoughBlocks(brickIndex)) {
                 if (queue.isEmpty())
@@ -79,32 +80,77 @@ public class Validator {
 
     void rollBack() {
         Memento back = queue.pop();
-        Brick poppedBrick = bricks.get(back.brickIndex);
-        poppedBrick.increaseCountOfBricksByOne();
-        matrix = Arrays.stream(back.currentMatrix).map(int[]::clone).toArray(int[][]::new);
+        currentBrick = bricks.get(back.brickIndex);
+        currentBrick.increaseCountOfSimilarBricksByOne();
+        matrix = back.currentMatrix;
+        wall.setCurrentMatrix(matrix);
+        setToZeroLastPointsInAllLowerBricks();
         brickIndex = back.brickIndex;
     }
 
+    void setToZeroLastPointsInAllLowerBricks() {
+        int temp = brickIndex;
+        while (temp < bricks.size()) {
+            var brick = bricks.get(temp);
+            brick.getLastPoint().setX(0);
+            brick.getLastPoint().setY(-1);
+            temp++;
+        }
+    }
+
+    public void makeStep() {
+        createSnapshot();
+        changeCurrentBrickCoordinatesAndDecreaseItCount();
+        fillMatrixWithCurrentBrick();
+    }
+
+    public void createSnapshot() {
+        int [][] copyMatrix = Arrays.stream(matrix).map(int[]::clone).toArray(int[][]::new);
+        Memento memento = new Memento(lastIndex, brickIndex, copyMatrix, countOfBlocks);
+        queue.push(memento);
+    }
+
+    void changeCurrentBrickCoordinatesAndDecreaseItCount() {
+        currentBrick.decreaseCountOfSimilarBricksByOne();
+        currentBrick.setLastPoint(lastIndex);
+    }
+
+    void fillMatrixWithCurrentBrick() {
+        int x = lastIndex.getX();
+        int y = lastIndex.getY();
+        for (int i = 0; i < height; i++)
+            for (int j = 0; j < width; j++)
+                matrix[x + i][y + j] = 0;
+        wall.decreaseCountOfBlocksByBrickSize(currentBrick.getCountOfBlocks());
+    }
+
     boolean findPlace() {
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                if (isEqualsOne(i, j)) {
+        int x = lastIndex.getX();
+        int y = lastIndex.getY();
+        if (y + 1 >= matrix[x].length) {
+            x++;
+            y = 0;
+        } else y++;
+        for (int i = x; i < matrix.length; i++) {
+            for (int j = y; j < matrix[i].length; j++) {
+                if (isBlock(i, j)) {
                     if (isEnoughAreaForBrick(i, j)) {
                         int[][] subMatrix = createSubMatrix(i, j);
                         boolean isAllOne = checkIfEveryBlockIsOne(subMatrix);
                         if (isAllOne) {
-                            currentPoint.setX(i);
-                            currentPoint.setY(j);
+                            lastIndex.setX(i);
+                            lastIndex.setY(j);
                             return true;
                         }
                     }
                 }
             }
+            y = 0;
         }
         return false;
     }
 
-    boolean isEqualsOne(int i, int j) {
+    boolean isBlock(int i, int j) {
         return matrix[i][j] == 1;
     }
 
@@ -129,31 +175,6 @@ public class Validator {
         return Arrays.stream(subMatrix).flatMapToInt(Arrays::stream).allMatch(i -> i == 1);
     }
 
-    public void makeStep() {
-        createSnapshot();
-        changeCurrentBrickCoordinatesAndDecreaseItCount();
-        fillMatrixWithCurrentBrick();
-    }
-
-    public void createSnapshot() {
-        int [][] copyMatrix = Arrays.stream(matrix).map(int[]::clone).toArray(int[][]::new);
-        Memento memento = new Memento(brickIndex, copyMatrix, countOfBlocks);
-        queue.push(memento);
-    }
-
-    void changeCurrentBrickCoordinatesAndDecreaseItCount() {
-        currentBrick.decreaseCountOfBricksByOne();
-    }
-
-    void fillMatrixWithCurrentBrick() {
-        int x = currentPoint.getX();
-        int y = currentPoint.getY();
-        for (int i = 0; i < height; i++)
-            for (int j = 0; j < width; j++)
-                matrix[x + i][y + j] = 0;
-        wall.decreaseCountOfBlocksByBrickSize(currentBrick.getCountOfBlocks());
-    }
-
     public boolean isEnoughBlocks(int index) {
         return countOfBlocksInSublist(index) >= wall.getCountOfBlocks();
     }
@@ -164,20 +185,29 @@ public class Validator {
                 .sum();
     }
 
+
+
     public boolean isWallFilled() {
         return Arrays.stream(wall.getCurrentMatrix()).flatMapToInt(Arrays::stream).allMatch(i -> i == 0);
     }
 
+
+    public List<Brick> getBricks() {
+        return bricks;
+    }
+
     static class Memento {
 
+        public Point lastIndex;
         public int brickIndex;
         public int [][] currentMatrix;
         public int countOfBlocks;
 
-        public Memento(int brickIndex, int[][] currentMatrix, int countOfBlocks) {
+        public Memento(Point lastIndex, int brickIndex, int[][] currentMatrix, int countOfBlocks) {
             this.brickIndex = brickIndex;
             this.currentMatrix = currentMatrix;
             this.countOfBlocks = countOfBlocks;
+            this.lastIndex = lastIndex;
         }
     }
 

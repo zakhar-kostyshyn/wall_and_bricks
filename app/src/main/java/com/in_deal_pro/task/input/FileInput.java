@@ -66,7 +66,7 @@ public class FileInput implements Input {
 
     private int getCountOfBlocksInWall() {
         return streamOfMatrixLines()
-                .map(line -> line.replaceAll("0", ""))
+                .map(line -> line.replaceAll("1", ""))
                 .mapToInt(String::length)
                 .sum();
 

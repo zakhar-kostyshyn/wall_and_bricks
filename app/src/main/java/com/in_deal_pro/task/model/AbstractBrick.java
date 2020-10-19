@@ -9,12 +9,14 @@ public abstract class AbstractBrick implements Brick {
     protected final int countOfBlocks;
 
     protected SimilarBlocks similarBlocks;
+    protected Point lastPoint;
 
     public AbstractBrick(int width, int height, SimilarBlocks similarBlocks) {
         this.width = width;
         this.height = height;
         this.similarBlocks = similarBlocks;
         this.countOfBlocks = width * height;
+        lastPoint = new Point();
     }
 
     @Override
@@ -74,11 +76,23 @@ public abstract class AbstractBrick implements Brick {
         similarBlocks.setCount(count);
     }
 
-    public void decreaseCountOfBricksByOne() {
+    public void decreaseCountOfSimilarBricksByOne() {
         this.setCountOfSimilarBricks(this.getCountOfSimilarBricks() - 1);
     }
 
-    public void increaseCountOfBricksByOne() {
+    public void increaseCountOfSimilarBricksByOne() {
         this.setCountOfSimilarBricks(this.getCountOfSimilarBricks() + 1);
+    }
+
+    public Point getLastPoint() {
+        return lastPoint;
+    }
+
+    public void setLastPoint(Point point) {
+        lastPoint = point;
+    }
+
+    public boolean isThereBricks() {
+        return countOfBlocks == 0;
     }
 }

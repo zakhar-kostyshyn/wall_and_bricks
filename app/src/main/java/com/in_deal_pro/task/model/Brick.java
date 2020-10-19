@@ -6,11 +6,14 @@ public interface Brick extends Comparable<Brick> {
     int getWidth();
     int getHeight();
     String toString();
-    void decreaseCountOfBricksByOne();
-    void increaseCountOfBricksByOne();
-
+    void decreaseCountOfSimilarBricksByOne();
+    Point getLastPoint();
+    void setLastPoint(Point point);
     SimilarBlocks getSimilarBlocks();
     int getCountOfSimilarBricks();
     void setCountOfSimilarBricks(int count);
+    void increaseCountOfSimilarBricksByOne();
 
+
+    boolean isThereBricks();
 }
