@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 public class SimpleFileTest extends FilesTest {
 
+
     @Test
     void testExampleTrueFile() {
         whenInputFile("exampleTrue.txt");
@@ -38,6 +39,12 @@ public class SimpleFileTest extends FilesTest {
     void test4x4False() {
         whenInputFile("4x4False.txt");
         thenFalse();
+    }
+
+    @Test
+    void testByOrestTrue() {
+        whenInputFile("testByOrest.txt");
+        thenTrue();
     }
 
 }

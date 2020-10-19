@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class FilesTest {
 
-    protected final static String home = "src/test/resources/";
+    protected static final String home = "src/test/resources/";
     protected Input input;
     protected Validator validator;
 

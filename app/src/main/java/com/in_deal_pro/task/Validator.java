@@ -8,9 +8,9 @@ import java.util.*;
 
 public class Validator {
 
-    public List<Brick> bricks;
-    public Wall wall;
-    public Deque<Memento> queue = new ArrayDeque<>();
+    private List<Brick> bricks;
+    private Wall wall;
+    private Deque<Memento> queue = new ArrayDeque<>();
 
     int brickIndex = 0;
 
@@ -166,11 +166,6 @@ public class Validator {
 
     public boolean isWallFilled() {
         return Arrays.stream(wall.getCurrentMatrix()).flatMapToInt(Arrays::stream).allMatch(i -> i == 0);
-    }
-
-
-    public List<Brick> getBricks() {
-        return bricks;
     }
 
     static class Memento {
