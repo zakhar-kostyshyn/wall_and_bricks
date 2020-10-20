@@ -4,7 +4,7 @@ import com.in_deal_pro.task.input.FileInput;
 import com.in_deal_pro.task.input.Input;
 import com.in_deal_pro.task.model.Brick;
 import com.in_deal_pro.task.model.NormalBrick;
-import com.in_deal_pro.task.model.SimilarBlocks;
+import com.in_deal_pro.task.model.BrickCount;
 import com.in_deal_pro.task.model.Wall;
 import org.junit.jupiter.api.Test;
 
@@ -55,7 +55,7 @@ class FileInputTest {
                         {1, 1, 1, 1, 1, 1},
                         {1, 1, 1, 1, 1, 1}
                 };
-        var expected = new Wall(matrix, 16);
+        var expected = new Wall(matrix);
         var actual = input.getWall();
         assertEquals(expected, actual);
     }
@@ -63,14 +63,14 @@ class FileInputTest {
     @Test
     void testGetAllBricks() {
         Set<Brick> expected = new TreeSet<>();
-        expected.add(new NormalBrick(4, 3, new SimilarBlocks(5)));
-        expected.add(new NormalBrick(1, 1, new SimilarBlocks(4)));
-        expected.add(new NormalBrick(2, 1, new SimilarBlocks(6)));
-        expected.add(new NormalBrick(1, 3, new SimilarBlocks(1)));
-        expected.add(new NormalBrick(3, 4, new SimilarBlocks(5)));
-        expected.add(new NormalBrick(1, 1, new SimilarBlocks(4)));
-        expected.add(new NormalBrick(1, 2, new SimilarBlocks(6)));
-        expected.add(new NormalBrick(3, 1, new SimilarBlocks(1)));
+        expected.add(new NormalBrick(4, 3, new BrickCount(5)));
+        expected.add(new NormalBrick(1, 1, new BrickCount(4)));
+        expected.add(new NormalBrick(2, 1, new BrickCount(6)));
+        expected.add(new NormalBrick(1, 3, new BrickCount(1)));
+        expected.add(new NormalBrick(3, 4, new BrickCount(5)));
+        expected.add(new NormalBrick(1, 1, new BrickCount(4)));
+        expected.add(new NormalBrick(1, 2, new BrickCount(6)));
+        expected.add(new NormalBrick(3, 1, new BrickCount(1)));
         var actual = input.getAllBricks();
         assertEquals(expected, actual);
     }

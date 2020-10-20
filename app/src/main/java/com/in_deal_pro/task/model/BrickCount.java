@@ -1,10 +1,10 @@
 package com.in_deal_pro.task.model;
 
-public class SimilarBlocks {
+public class BrickCount {
 
     int count;
 
-    public SimilarBlocks(int count) {
+    public BrickCount(int count) {
         this.count = count;
     }
 

@@ -25,8 +25,8 @@ public class SimpleFileTest extends FilesTest {
 
     @Test
     void test6x3False() {
-        whenInputFile("6x3False.txt");
-        thenFalse();
+        whenInputFile("6x3True2.txt");
+        thenTrue();
     }
 
     @Test

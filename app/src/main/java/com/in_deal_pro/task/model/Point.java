@@ -16,13 +16,36 @@ public class Point {
         this.y = y;
     }
 
+    public boolean isNextPointOutOfMatrixRowRange(int[][] matrix) {
+        return y + 1 <= matrix[x].length;
+    }
+
+    public Point onNextColumn() {
+        return new Point(x, y + 1);
+    }
+
+    public Point onNextRow() {
+        return new Point(x + 1, 0);
+    }
+
+    public void setPointOnRowStart() {
+        setY(0);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
-        return x == point.x &&
-                y == point.y;
+        return x == point.x && y == point.y;
+    }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 
     @Override

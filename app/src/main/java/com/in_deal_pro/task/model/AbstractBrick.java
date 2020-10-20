@@ -6,24 +6,49 @@ public abstract class AbstractBrick implements Brick {
 
     protected final int width;
     protected final int height;
-    protected final int countOfBlocks;
 
-    protected SimilarBlocks similarBlocks;
+    protected BrickCount brickCount;
     protected Point lastPoint;
 
-    public AbstractBrick(int width, int height, SimilarBlocks similarBlocks) {
+    public AbstractBrick(int width, int height, BrickCount brickCount) {
         this.width = width;
         this.height = height;
-        this.similarBlocks = similarBlocks;
-        this.countOfBlocks = width * height;
+        this.brickCount = brickCount;
         lastPoint = new Point();
     }
+
+    public void putIn(Wall wall) {
+        for (int i = 0; i < height; i++)
+            for (int j = 0; j < width; j++) {
+                int x = lastX() + i;
+                int y = lastY() + j;
+                wall.setCoordinateWithZero(x, y);
+            }
+    }
+
+    private int lastX() {
+        return lastPoint.getX();
+    }
+
+    private int lastY() {
+        return lastPoint.getY();
+    }
+
+    public boolean isEnoughMatrixSpaceFromPoint(int[][] matrix, Point point) {
+        return  isEnoughMatrixSpace(point.getX(), height, matrix.length) &&
+                isEnoughMatrixSpace(point.getY(), width, matrix[point.getX()].length);
+    }
+
+    private boolean isEnoughMatrixSpace(int index, int direction, int limit) {
+        return index + direction <= limit;
+    }
+
 
     @Override
     public int compareTo(Brick o) {
         int result = Integer.compare(o.getWidth() + o.getHeight(), width + height);
         if (result == 0)
-            return Integer.compare(o.getWidth(), width);
+            return Integer.compare(o.getHeight(), height);
         return result;
     }
 
@@ -34,27 +59,14 @@ public abstract class AbstractBrick implements Brick {
         AbstractBrick brick = (AbstractBrick) o;
         return  width == brick.width &&
                 height == brick.height &&
-                similarBlocks == brick.similarBlocks &&
-                countOfBlocks == brick.countOfBlocks;
+                brickCount == brick.brickCount;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(width, height, similarBlocks, countOfBlocks);
+        return Objects.hash(width, height, brickCount);
     }
 
-    @Override
-    public String toString() {
-        return "Brick{" +
-                "width=" + width +
-                ", height=" + height +
-                '}';
-    }
-
-
-    public int getCountOfBlocks() {
-        return countOfBlocks;
-    }
 
     public int getWidth() {
         return width;
@@ -65,23 +77,23 @@ public abstract class AbstractBrick implements Brick {
     }
 
     public int getCountOfSimilarBricks() {
-        return similarBlocks.getCount();
+        return brickCount.getCount();
     }
 
-    public SimilarBlocks getSimilarBlocks() {
-        return similarBlocks;
+    public BrickCount getBrickCount() {
+        return brickCount;
     }
 
     public void setCountOfSimilarBricks(int count) {
-        similarBlocks.setCount(count);
+        brickCount.setCount(count);
     }
 
-    public void decreaseCountOfSimilarBricksByOne() {
-        this.setCountOfSimilarBricks(this.getCountOfSimilarBricks() - 1);
+    public void decreaseBreaksByOne() {
+        setCountOfSimilarBricks(getCountOfSimilarBricks() - 1);
     }
 
     public void increaseCountOfSimilarBricksByOne() {
-        this.setCountOfSimilarBricks(this.getCountOfSimilarBricks() + 1);
+        setCountOfSimilarBricks(getCountOfSimilarBricks() + 1);
     }
 
     public Point getLastPoint() {
@@ -92,7 +104,7 @@ public abstract class AbstractBrick implements Brick {
         lastPoint = point;
     }
 
-    public boolean isThereBricks() {
-        return countOfBlocks == 0;
+    public boolean isThereNOBricks() {
+        return brickCount.getCount() <= 0;
     }
 }

@@ -61,15 +61,7 @@ public class FileInput implements Input {
 
     @Override
     public Wall getWall() {
-        return new Wall(getShapeMatrix(), getCountOfBlocksInWall());
-    }
-
-    private int getCountOfBlocksInWall() {
-        return streamOfMatrixLines()
-                .map(line -> line.replaceAll("1", ""))
-                .mapToInt(String::length)
-                .sum();
-
+        return new Wall(getShapeMatrix());
     }
 
     private int[][] getShapeMatrix() {
@@ -99,7 +91,7 @@ public class FileInput implements Input {
                 .map(line -> new NormalBrick(
                         parseInt(line.substring(0, 1)),
                         parseInt(line.substring(1, 2)),
-                        new SimilarBlocks(parseInt(line.substring(2))))
+                        new BrickCount(parseInt(line.substring(2))))
                 ).collect(toCollection(TreeSet::new));
     }
 
